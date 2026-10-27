@@ -6,5 +6,12 @@ abstract class Vivienda
   private string $fecha;
   private float $superficie;
 
-  abstract function calcularCosteTotal();
+  public function __construct(string $nombre, string $fecha, float $superficie)
+  {
+    $this->nombre = $nombre;
+    $this->fecha = $fecha;
+    $this->superficie = $superficie;
+  }
+
+  abstract public function calcularCosteTotal();
 }

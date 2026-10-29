@@ -2,9 +2,9 @@
 
 abstract class Vivienda
 {
-  private string $nombre;
-  private string $fecha;
-  private float $superficie;
+  protected string $nombre;
+  protected string $fecha;
+  protected float $superficie;
 
   public function __construct(string $nombre, string $fecha, float $superficie)
   {

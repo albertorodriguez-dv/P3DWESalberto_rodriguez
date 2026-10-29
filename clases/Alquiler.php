@@ -1,5 +1,7 @@
 <?php
 
+require_once("Vivienda.php");
+
 class Alquiler extends Vivienda
 {
   private float $rentaMensual;

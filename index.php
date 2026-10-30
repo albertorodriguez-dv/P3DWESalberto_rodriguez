@@ -1,7 +1,10 @@
 <?php
-session_start();
-
 require_once("ColeccionViviendas.php");
+require_once("clases/ViviendaAlquiler.php");
+require_once("clases/ViviendaCompra.php");
+require_once("clases/ViviendaConstruccion.php");
+
+session_start();
 
 $tipoVivienda = $_POST["selector-vivienda"] ?? "";
 $errores = [];

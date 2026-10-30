@@ -7,6 +7,11 @@ class ColeccionViviendas implements ListaViviendas
 {
   private array $viviendas = [];
 
+  public function getViviendas(): array
+  {
+    return $this->viviendas;
+  }
+
   #[Override]
   public function insertar_vivienda($vivienda): void
   {

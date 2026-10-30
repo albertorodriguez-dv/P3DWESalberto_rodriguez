@@ -6,9 +6,13 @@ require_once("clases/ViviendaConstruccion.php");
 
 session_start();
 
+if (!isset($_SESSION["coleccion"])) {
+    $_SESSION["coleccion"] = new ColeccionViviendas();
+}
+
 $tipoVivienda = $_POST["selector-vivienda"] ?? "";
 $errores = [];
-$contador = 0;
+
 
 if (isset($_POST["agregar-vivienda"])) {
     $rangos = [];
@@ -50,9 +54,6 @@ if (isset($_POST["agregar-vivienda"])) {
 
     if (empty($errores)) {
 
-
-        $viviendaColeccion = new ColeccionViviendas();
-        $viviendaColeccion->insertar_vivienda();
     }
 }
 

@@ -1,11 +1,56 @@
-
 <?php
 session_start();
 
-$tipoVivienda = "";
+require_once("ColeccionViviendas.php");
 
-if (isset($_POST["selector-vivienda"])) {
-    $tipoVivienda = $_POST["selector-vivienda"];
+$tipoVivienda = $_POST["selector-vivienda"] ?? "";
+$errores = [];
+$contador = 0;
+
+if (isset($_POST["agregar-vivienda"])) {
+    $rangos = [];
+
+    if ($tipoVivienda === "Alquiler") {
+        $rangos = [
+            "renta-mensual" => [300, 2500],
+            "subida-anual" => [0, 5],
+            "plazo" => [1, 30],
+            "superficie" => [40, 400]
+        ];
+    } elseif ($tipoVivienda === "Compra") {
+        $rangos = [
+            "precio" => [50000, 800000],
+            "porcentaje-entrada" => [10, 50],
+            "tasa-interes" => [0.5, 8],
+            "plazo" => [5, 30],
+            "superficie" => [40, 400]
+        ];
+    } elseif ($tipoVivienda === "Construccion") {
+        $rangos = [
+            'precio-suelo' => [20000, 300000],
+            'porcentaje-entrada' => [10, 50],
+            'tasa-interes' => [0.5, 8],
+            'plazo' => [5, 30],
+            'coste-construccion' => [600, 1500],
+            'honorarios-licencias' => [5, 20],
+            'superficie' => [40, 400]
+        ];
+    }
+
+    foreach ($rangos as $campo => $rango) {
+        $valor = $_POST[$campo] ?? "";
+
+        if ($valor === "" || !is_numeric($valor) || $valor < $rango[0] || $valor > $rango[1]) {
+            $errores[] = "El valor del campo '$campo' no es correcto (debe estar entre {$rango[0]} y {$rango[1]}).";
+        }
+    }
+
+    if (empty($errores)) {
+
+
+        $viviendaColeccion = new ColeccionViviendas();
+        $viviendaColeccion->insertar_vivienda();
+    }
 }
 
 $formulario = "";
@@ -13,7 +58,6 @@ $formulario = "";
 if ($tipoVivienda == "Compra") {
     $formulario = "
         <h2>Datos de la vivienda en compra</h2>
-
         <form action='index.php' method='POST'>
             <input type='hidden' name='selector-vivienda' value='Compra'>
 
@@ -23,7 +67,7 @@ if ($tipoVivienda == "Compra") {
             <label>Entrada (%):</label>
             <input type='number' name='porcentaje-entrada'>
 
-            <label>Tasa de interés anual:</label>
+            <label>Tasa de interés anual (%):</label>
             <input type='number' name='tasa-interes'>
 
             <label>Plazo (en años):</label>
@@ -38,18 +82,17 @@ if ($tipoVivienda == "Compra") {
 } elseif ($tipoVivienda == "Alquiler") {
     $formulario = "
         <h2>Datos de la vivienda en alquiler</h2>
-
         <form action='index.php' method='POST'>
             <input type='hidden' name='selector-vivienda' value='Alquiler'>
 
             <label>Renta mensual:</label>
-            <input type='number' name='precio'>
+            <input type='number' name='renta-mensual'>
 
             <label>Subida anual (%):</label>
-            <input type='number' name='localidad'>
+            <input type='number' name='subida-anual'>
 
             <label>Plazo (en años):</label>
-            <input type='number' name='localidad'>
+            <input type='number' name='plazo'>
 
             <label>Superficie (m²):</label>
             <input type='number' name='superficie'>
@@ -60,17 +103,16 @@ if ($tipoVivienda == "Compra") {
 } elseif ($tipoVivienda == "Construccion") {
     $formulario = "
         <h2>Datos de la vivienda de construcción propia</h2>
-
         <form action='index.php' method='POST'>
             <input type='hidden' name='selector-vivienda' value='Construccion'>
 
             <label>Precio del suelo:</label>
-            <input type='number' name='precio'>
+            <input type='number' name='precio-suelo'>
 
             <label>Entrada (%):</label>
             <input type='number' name='porcentaje-entrada'>
 
-            <label>Tasa de interés anual:</label>
+            <label>Tasa de interés anual (%):</label>
             <input type='number' name='tasa-interes'>
 
             <label>Plazo (en años):</label>
@@ -79,7 +121,7 @@ if ($tipoVivienda == "Compra") {
             <label>Coste de construcción:</label>
             <input type='number' name='coste-construccion'>
 
-            <label>Honorarios y licencias:</label>
+            <label>Honorarios y licencias (%):</label>
             <input type='number' name='honorarios-licencias'>  
             
             <label>Superficie (m²):</label>
@@ -107,30 +149,16 @@ if ($tipoVivienda == "Compra") {
         <label for="selector-vivienda">Elige tu tipo de vivienda:</label>
 
         <select name="selector-vivienda" id="selector-vivienda">
-            <option value="Compra"
-                <?php
-                if ($tipoVivienda == "Compra") {
-                    echo "selected";
-                }
-                ?>>
+            <option value="Compra" <?php if ($tipoVivienda == "Compra")
+                echo "selected"; ?>>
                 Compra
             </option>
-
-            <option value="Alquiler"
-                <?php
-                if ($tipoVivienda == "Alquiler") {
-                    echo "selected";
-                }
-                ?>>
+            <option value="Alquiler" <?php if ($tipoVivienda == "Alquiler")
+                echo "selected"; ?>>
                 Alquiler
             </option>
-
-            <option value="Construccion"
-                <?php
-                if ($tipoVivienda == "Construccion") {
-                    echo "selected";
-                }
-                ?>>
+            <option value="Construccion" <?php if ($tipoVivienda == "Construccion")
+                echo "selected"; ?>>
                 Construcción propia
             </option>
         </select>
@@ -139,6 +167,14 @@ if ($tipoVivienda == "Compra") {
     </form>
 
     <?php
+    if (!empty($errores)) {
+        echo "<ul>";
+        foreach ($errores as $error) {
+            echo "<li>$error</li>";
+        }
+        echo "</ul>";
+    }
+
     echo $formulario;
     ?>
 
@@ -146,13 +182,14 @@ if ($tipoVivienda == "Compra") {
 
     <form action="index.php" method="POST">
         <button type="submit" name="comparar">Comparar</button>
+        <button type="submit" name="eliminar-primero">Eliminar primero</button>
 
         <label for="ordenar-mayor-menor">
-            <input type="checkbox" name="ordenar-mayor-menor"
-                id="ordenar-mayor-menor">
-            Ordenar de mayor a menor
+            <input type="checkbox" name="ordenar-mayor-menor" id="ordenar-mayor-menor">
+            Ordenar por coste total
         </label>
     </form>
 
 </body>
+
 </html>

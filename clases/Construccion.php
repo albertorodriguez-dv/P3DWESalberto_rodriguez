@@ -28,7 +28,7 @@ class Construccion extends Vivienda
 
   public function calcularPrecioTotal()
   {
-    return $this->precioSuelo + $this->superficie * $this->metrosCuadrados * (1 + ($this->honorariosLicencia) / 100);
+    return $this->precioSuelo + $this->superficie * (1 + ($this->honorariosLicencia) / 100);
   }
 
   public function calcularEntrada()

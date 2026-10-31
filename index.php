@@ -10,6 +10,10 @@ if (!isset($_SESSION["coleccion"])) {
     $_SESSION["coleccion"] = new ColeccionViviendas();
 }
 
+if (!isset($_SESSION["contador"])) {
+    $_SESSION["contador"] = 0;
+}
+
 $tipoVivienda = $_POST["selector-vivienda"] ?? "";
 $errores = [];
 
@@ -54,7 +58,7 @@ if (isset($_POST["agregar-vivienda"])) {
     }
 
     if (empty($errores)) {
-        $nombre = "Vivienda #" . (count($_SESSION["coleccion"]->getViviendas()) + 1);
+        $nombre = "Vivienda " . ($_SESSION["contador"] + 1);
         $fecha = date("d-m-Y");
         $superficie = $_POST["superficie"];
 
@@ -93,7 +97,7 @@ if (isset($_POST["agregar-vivienda"])) {
 
         if (isset($vivienda)) {
             $_SESSION["coleccion"]->insertar_vivienda($vivienda);
-            $valoresValidos = [];
+            $_SESSION["contador"]++;
         }
     }
 }
@@ -237,7 +241,11 @@ if ($tipoVivienda == "Compra") {
 
     <?php
     if (isset($_POST["comparar"])) {
-        $lista = $_SESSION["coleccion"]->getViviendas();
+        if (isset($_POST["ordenar-mayor-menor"])) {
+            $lista = $_SESSION["coleccion"]->ordenar_por_coste_total();
+        } else {
+            $lista = $_SESSION["coleccion"]->getViviendas();
+        }
 
         echo "<table border='1'>";
         echo "<tr>
@@ -254,6 +262,28 @@ if ($tipoVivienda == "Compra") {
         foreach ($lista as $vivienda) {
             $vivienda->filaTabla();
         }
+
+        echo "</table>";
+    }
+    ?>
+
+    <?php
+    if (isset($_POST["eliminar-primero"])) {
+        $eliminada = $_SESSION["coleccion"]->eliminar_primera();
+
+        echo "<table border='1'>";
+        echo "<tr>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Precio / Renta</th>
+            <th>m²</th>
+            <th>Plazo</th>
+            <th>Cuota</th>
+            <th>Coste total</th>
+          </tr>";
+
+        $eliminada->filaTabla();
 
         echo "</table>";
     }

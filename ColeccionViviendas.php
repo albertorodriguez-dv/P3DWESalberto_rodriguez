@@ -22,7 +22,7 @@ class ColeccionViviendas implements ListaViviendas
   public function eliminar_primera(): Vivienda
   {
     if (empty($this->viviendas)) {
-      throw new UnderflowException("La colección está vacía");
+      echo "ERROR: No hay viviendas";
     }
 
     return array_shift($this->viviendas);

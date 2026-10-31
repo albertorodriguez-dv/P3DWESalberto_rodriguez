@@ -19,10 +19,27 @@ class Alquiler extends Vivienda
   #[Override]
   public function calcularCosteTotal()
   {
-    if ($this->subidaAnual == 0) {
+    $s = $this->subidaAnual / 100;
+
+    if ($s == 0) {
       return 12 * $this->rentaMensual * $this->plazo;
     }
 
-    return 12 * $this->rentaMensual * (pow(1 + $this->subidaAnual, $this->plazo) - 1) / $this->subidaAnual;
+    return 12 * $this->rentaMensual * (pow(1 + $s, $this->plazo) - 1) / $s;
+  }
+
+  #[Override]
+  public function filaTabla()
+  {
+    echo "<tr>";
+    echo "<td>" . $this->nombre . "</td>";
+    echo "<td>" . $this->fecha . "</td>";
+    echo "<td>" . "Alquiler" . "</td>";
+    echo "<td>" . $this->rentaMensual . "</td>";
+    echo "<td>" . $this->superficie . "</td>";
+    echo "<td>" . $this->plazo . "</td>";
+    echo "<td>" . "-" . "</td>";
+    echo "<td>" . $this->calcularCosteTotal() . "</td>";
+    echo "</tr>";
   }
 }

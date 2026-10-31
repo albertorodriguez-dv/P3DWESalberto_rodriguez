@@ -1,7 +1,7 @@
 <?php
 
-require_once("clases\Vivienda.php");
-require_once("clases\ListaViviendas.php");
+require_once("clases/Vivienda.php");
+require_once("clases/ListaViviendas.php");
 
 class ColeccionViviendas implements ListaViviendas
 {
@@ -34,7 +34,7 @@ class ColeccionViviendas implements ListaViviendas
     $viviendasOrdenadas = $this->viviendas;
 
     usort($viviendasOrdenadas, function ($a, $b) {
-      return $a->get_coste_total() <=> $b->get_coste_total();
+      return $a->calcularCosteTotal() <=> $b->calcularCosteTotal();
     });
 
     return $viviendasOrdenadas;

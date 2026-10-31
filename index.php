@@ -1,8 +1,8 @@
 <?php
 require_once("ColeccionViviendas.php");
-require_once("clases/ViviendaAlquiler.php");
-require_once("clases/ViviendaCompra.php");
-require_once("clases/ViviendaConstruccion.php");
+require_once("clases/Alquiler.php");
+require_once("clases/Compra.php");
+require_once("clases/Construccion.php");
 
 session_start();
 
@@ -12,7 +12,6 @@ if (!isset($_SESSION["coleccion"])) {
 
 $tipoVivienda = $_POST["selector-vivienda"] ?? "";
 $errores = [];
-
 
 if (isset($_POST["agregar-vivienda"])) {
     $rangos = [];
@@ -49,11 +48,53 @@ if (isset($_POST["agregar-vivienda"])) {
 
         if ($valor === "" || !is_numeric($valor) || $valor < $rango[0] || $valor > $rango[1]) {
             $errores[] = "El valor del campo '$campo' no es correcto (debe estar entre {$rango[0]} y {$rango[1]}).";
+        } else {
+            $valoresValidos[$campo] = $valor;
         }
     }
 
     if (empty($errores)) {
+        $nombre = "Vivienda #" . (count($_SESSION["coleccion"]->getViviendas()) + 1);
+        $fecha = date("d-m-Y");
+        $superficie = $_POST["superficie"];
 
+        if ($tipoVivienda === "Alquiler") {
+            $vivienda = new Alquiler(
+                $nombre,
+                $fecha,
+                $superficie,
+                $_POST["renta-mensual"],
+                $_POST["subida-anual"],
+                $_POST["plazo"]
+            );
+        } elseif ($tipoVivienda === "Compra") {
+            $vivienda = new Compra(
+                $nombre,
+                $fecha,
+                $superficie,
+                $_POST["precio"],
+                $_POST["porcentaje-entrada"],
+                $_POST["tasa-interes"],
+                $_POST["plazo"]
+            );
+        } elseif ($tipoVivienda === "Construccion") {
+            $vivienda = new Construccion(
+                $nombre,
+                $fecha,
+                $superficie,
+                $_POST["coste-construccion"],
+                $_POST["honorarios-licencias"],
+                $_POST["porcentaje-entrada"],
+                $_POST["tasa-interes"],
+                $_POST["plazo"],
+                $_POST["precio-suelo"]
+            );
+        }
+
+        if (isset($vivienda)) {
+            $_SESSION["coleccion"]->insertar_vivienda($vivienda);
+            $valoresValidos = [];
+        }
     }
 }
 
@@ -193,6 +234,30 @@ if ($tipoVivienda == "Compra") {
             Ordenar por coste total
         </label>
     </form>
+
+    <?php
+    if (isset($_POST["comparar"])) {
+        $lista = $_SESSION["coleccion"]->getViviendas();
+
+        echo "<table border='1'>";
+        echo "<tr>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Precio / Renta</th>
+            <th>m²</th>
+            <th>Plazo</th>
+            <th>Cuota</th>
+            <th>Coste total</th>
+          </tr>";
+
+        foreach ($lista as $vivienda) {
+            $vivienda->filaTabla();
+        }
+
+        echo "</table>";
+    }
+    ?>
 
 </body>
 

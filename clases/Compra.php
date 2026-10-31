@@ -23,7 +23,7 @@ class Compra extends Vivienda
 
   public function calcularEntrada()
   {
-    return $this->precioVivienda * $this->porcentajeEntrada;
+    return $this->precioVivienda * $this->porcentajeEntrada / 100;
   }
 
   public function calcularCapital()
@@ -35,5 +35,20 @@ class Compra extends Vivienda
   public function calcularCosteTotal()
   {
     return $this->calcularEntrada() + 12 * $this->plazo * $this->cuota;
+  }
+
+  #[Override]
+  public function filaTabla()
+  {
+    echo "<tr>";
+    echo "<td>" . $this->nombre . "</td>";
+    echo "<td>" . $this->fecha . "</td>";
+    echo "<td>" . "Compra" . "</td>";
+    echo "<td>" . $this->precioVivienda . "</td>";
+    echo "<td>" . $this->superficie . "</td>";
+    echo "<td>" . $this->plazo . "</td>";
+    echo "<td>" . $this->cuota . "</td>";
+    echo "<td>" . $this->calcularCosteTotal() . "</td>";
+    echo "</tr>";
   }
 }

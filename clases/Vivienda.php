@@ -14,4 +14,6 @@ abstract class Vivienda
   }
 
   abstract public function calcularCosteTotal();
+
+  abstract public function filaTabla();
 }

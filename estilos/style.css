@@ -1,0 +1,283 @@
+:root {
+  --negro: #000;
+  --texto: #111;
+  --gris: #8a8a8a;
+  --linea: #dcdcdc;
+  --panel: #f4f3f1;
+  --error: #d10000;
+}
+
+* {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 56px 32px 120px;
+  background: #fff;
+  color: var(--texto);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Titulares */
+
+h1 {
+  margin: 0 0 56px;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 56px 0 24px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gris);
+}
+
+/* Formularios: etiqueta a la izquierda, valor a la derecha */
+
+form {
+  margin: 0;
+}
+
+form:not(:first-of-type):not(:last-of-type) {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 420px);
+  column-gap: 40px;
+  row-gap: 16px;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--texto);
+}
+
+input[type="number"],
+select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--linea);
+  background: #fff;
+  color: var(--texto);
+  font: inherit;
+  font-size: 13px;
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select {
+  appearance: auto;
+}
+
+input[type="number"]:hover,
+select:hover {
+  border-color: var(--gris);
+}
+
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--negro);
+}
+
+/* Selector de tipo */
+
+form:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--linea);
+}
+
+form:first-of-type label {
+  margin-right: 12px;
+  color: var(--gris);
+}
+
+form:first-of-type select {
+  width: auto;
+  min-width: 220px;
+}
+
+/* Botones */
+
+button {
+  height: 44px;
+  padding: 0 28px;
+  border: 1px solid var(--negro);
+  background: var(--negro);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+button:hover {
+  background: #fff;
+  color: var(--negro);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--negro);
+  outline-offset: 2px;
+}
+
+button[name="agregar-vivienda"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 24px;
+}
+
+/* Barra de acciones */
+
+form:last-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--linea);
+}
+
+form:last-of-type label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+button[name="eliminar-primero"] {
+  background: #fff;
+  border-color: var(--linea);
+  color: var(--texto);
+}
+
+button[name="eliminar-primero"]:hover {
+  border-color: var(--negro);
+  background: #fff;
+  color: var(--texto);
+}
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--negro);
+  cursor: pointer;
+}
+
+/* Errores */
+
+ul {
+  margin: 24px 0 0;
+  padding: 14px 18px;
+  list-style: none;
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+ul li + li {
+  margin-top: 4px;
+}
+
+hr {
+  display: none;
+}
+
+/* Tablas */
+
+table {
+  display: block;
+  width: 100%;
+  margin: 32px 0 0;
+  padding: 8px 28px 12px;
+  overflow-x: auto;
+  border-collapse: collapse;
+  background: var(--panel);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+th {
+  padding: 16px 16px 12px 0;
+  border-bottom: 1px solid var(--negro);
+  text-align: left;
+  font-weight: 400;
+  color: var(--gris);
+  white-space: nowrap;
+}
+
+td {
+  padding: 16px 16px 16px 0;
+  border-bottom: 1px solid var(--linea);
+  white-space: nowrap;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
+}
+
+/* Columnas numéricas a la derecha */
+th:nth-child(n + 4),
+td:nth-child(n + 4) {
+  text-align: right;
+}
+
+/* Móvil */
+
+@media (max-width: 720px) {
+  body {
+    padding: 32px 20px 80px;
+  }
+
+  h1 {
+    font-size: 40px;
+    margin-bottom: 36px;
+  }
+s
+  form:not(:first-of-type):not(:last-of-type) {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+  }
+
+  form:not(:first-of-type):not(:last-of-type) label {
+    margin-top: 14px;
+  }
+
+  form:last-of-type label {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  table {
+    padding: 4px 16px 8px;
+  }
+}

@@ -52,8 +52,6 @@ if (isset($_POST["agregar-vivienda"])) {
 
         if ($valor === "" || !is_numeric($valor) || $valor < $rango[0] || $valor > $rango[1]) {
             $errores[] = "El valor del campo '$campo' no es correcto (debe estar entre {$rango[0]} y {$rango[1]}).";
-        } else {
-            $valoresValidos[$campo] = $valor;
         }
     }
 
@@ -188,6 +186,7 @@ if ($tipoVivienda == "Compra") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos/style.css">
     <title>Práctica UT3 | Comparador de vivienda</title>
 </head>
 
